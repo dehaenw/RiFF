@@ -5,9 +5,11 @@ i have fragments categorized per functional group in the folder fragments
 ## fragcombine
 the main script, heres an example usage
 ```
-python3 fragcombine.py --i dock_amines.sdf dock_acids.sdf --angle_cutoff 0.9 --coord_cutoff 0.1
+python3 fragcombine.py --i example_data/c_abl1_dock.sdf example_data/a_abl1_dock.sdf --angle_cutoff 0.85 --coord_cutoff 0.5 --output example_data/abl1_dock_merged.sdf
 ```
-here's the result, combined fragments in cyan:
+here's the result, 76/1000000 are hits, in the gif below the combined fragments are sshown in cyan:
+
+
 ![pic of the combined fragments inside the abl1 pocket](pictures/abl_riff.gif)
 ## dock frags
 this is just a handy script for running dockstring jobs. the example data in example_data was generated using
