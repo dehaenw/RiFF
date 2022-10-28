@@ -51,7 +51,9 @@ def dock(cmpds,target,output):
             print("docking failure for smi {}".format(smi))
     writer = Chem.SDWriter(output)        
     for mol in mols:
-        writer.write(mol)
+        confs = mol.GetConformers()
+        for c in confs:
+            writer.write(m, confId=c.GetId())
     return scores
 
 
