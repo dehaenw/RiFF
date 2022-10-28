@@ -9,6 +9,12 @@ import sys
 sys.path.append(os.path.join(RDConfig.RDContribDir, 'CalcLigRMSD'))
 from CalcLigRMSD import *
 
+
+
+
+
+    
+
 def rmsd_docked(mol,dockedmol):
     """ function for calculating the rmsd between the atoms of the merged and
     docked poses
@@ -18,9 +24,17 @@ def rmsd_docked(mol,dockedmol):
     #mcdocked=dockedmol.GetConformer()
     #coords2 = [list(mcdocked.GetAtomPosition(a.GetIdx())) for a in dockedmol.GetAtoms() if a.GetAtomicNum()!=1]
     #rmsd = sum([coord for i, coord in coords1])
-    rmsd=CalcLigRMSD(mol,dockedmol, rename_lig2 = False)
-
-    return rmsd
+    confmols=[]
+    rmsds=[]
+    for conf in dockedmol.GetConformers():
+        molx=Chem.RWMol(dockedmol)
+        molx.RemoveAllConformers()
+        molx.AddConformer(conf)
+        confmols.append(molx)
+    for i,cm in enumerate(confmols):
+        rmsd=CalcLigRMSD(cm,mol, rename_lig2 = False)
+        rmsds.append(rmsd)
+    return rmsds
 
 def dock_compounds_and_generate_metrics(inputfile,target):
     """ open sdf file of merged compounds, redock and calculate rmsd between
@@ -34,7 +48,7 @@ def dock_compounds_and_generate_metrics(inputfile,target):
             smi = Chem.MolToSmiles(mol)
             print("docking", smi)
             score,aux = target.dock(smi,pH=7.4)
-            metrics.append((smi,score,CalcLigRMSD(mol,aux["ligand"],rename_lig2 = False)))
+            metrics.append(([smi]+aux["affinities"]+rmsd_docked(mol,aux["ligand"])))
             print(metrics[-1])
         except Exception as e:
             try:
@@ -47,7 +61,6 @@ def dock_compounds_and_generate_metrics(inputfile,target):
 def save_report(metrics,outputfile):
     with open(outputfile, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',',quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow(("smiles","docking_score","rmsd"))
         for metric in metrics:
             writer.writerow(metric)
 
@@ -65,6 +78,5 @@ if __name__=="__main__":
     args = parser.parse_args()
     target = dock_frags.load_target(args.target)
     metrics = dock_compounds_and_generate_metrics(args.input,target)
-    print(metrics)
     save_report(metrics,args.output)
 
