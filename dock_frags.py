@@ -36,7 +36,7 @@ def load_and_split(filenames, curr_slice, total_slices):
     i2=int(curr_slice/total_slices*len(cmpds_smis))
     return cmpds_smis[i1:i2]
     
-def dock(cmpds,target,output):
+def dock(cmpds,target,output,multiconf):
     """use dockstring to dock the slice of compounds
     and then add Hs and write to SDF
     """
@@ -51,9 +51,12 @@ def dock(cmpds,target,output):
             print("docking failure for smi {}".format(smi))
     writer = Chem.SDWriter(output)        
     for mol in mols:
-        confs = mol.GetConformers()
-        for c in confs:
-            writer.write(mol, confId=c.GetId())
+        if multiconfs!=False:
+            confs = mol.GetConformers()
+            for c in confs:
+                writer.write(mol, confId=c.GetId())
+        else:
+            writer.write(mol)
     return scores
 
 
@@ -64,11 +67,11 @@ if __name__=="__main__":
     parser.add_argument('--target', metavar='t', required=False, type=str, default="ABL1", help='target to dock to (input must be compatible with dockstring)')
     parser.add_argument('--current_slice', metavar='c', required=False, type=int, default=1, help='if dataset is split, which slice to process. index count starts at 1')
     parser.add_argument('--slices', metavar='s', required=False, type=int, default=1, help='split dataset in n slices')
-    parser.add_argument('--mode', metavar='m', required=False, type=str, default="dock", help='mode for generating conformers')    
+    parser.add_argument('--multi_conformations', metavar='m', required=False, type=bool, default=False, help='so to true to retain all 9 dockstring conformatiosn.')    
     parser.add_argument('--output', metavar='o', type=str, required=False, default="output_docked.sdf", help='output sdf file with merged fragments')    
     args = parser.parse_args()
     target = load_target(args.target)
     cmpds = load_and_split(args.input,args.current_slice,args.slices)
     print("docking {} compounds".format(len(cmpds)))
-    dock(cmpds,target,args.output)
+    dock(cmpds,target,args.output,args.multi_conformations)
    
