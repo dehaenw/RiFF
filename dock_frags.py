@@ -53,7 +53,7 @@ def dock(cmpds,target,output):
     for mol in mols:
         confs = mol.GetConformers()
         for c in confs:
-            writer.write(m, confId=c.GetId())
+            writer.write(mol, confId=c.GetId())
     return scores
 
 
