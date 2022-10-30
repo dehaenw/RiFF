@@ -49,13 +49,11 @@ def merge_mol(mol1,mol2,info1,info2,rxn):
     """
     merged_mols = rxn.RunReactants((Chem.RemoveHs(mol1),Chem.RemoveHs(mol2)))
     if len(merged_mols)>1:
+        match_amounts=[]
         for curr_mol in merged_mols:
-            old_idx = [int(atom.GetProp("react_atom_idx")) for atom in curr_mol[1].GetAtoms() if "old_mapno" in list(atom.GetPropNames())]
-            old_idx += [int(atom.GetProp("react_atom_idx")) for atom in curr_mol[0].GetAtoms() if "old_mapno" in list(atom.GetPropNames())]
-            if info1[0][0] in old_idx and info2[0][0] in old_idx:
-                merged_mol=curr_mol[0]
-            else:
-                pass#print(old_idx,info1[0],info2[0])
+            product_idx = [int(atom.GetProp("react_atom_idx")) for atom in curr_mol[0].GetAtoms() if "old_mapno" in list(atom.GetPropNames())]
+            match_amounts.append(product_idx.count(info1[0][0])+product_idx.count(info2[0][0]))
+        merged_mol=merged_mols[np.argmax(match_amounts)][0] #get best match and account foridx collision
     else:
         merged_mol=merged_mols[0][0]
     Chem.SanitizeMol(merged_mol)
