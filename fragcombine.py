@@ -171,15 +171,15 @@ def combine_fragments(sdfs,reaction,outputpath,coord_cutoff=0.25,angle_cutoff=0.
     
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description='Fragment joining script.')
-    parser.add_argument('--input', metavar='-i',nargs='+', type=str, help='path to sdf file(s) with to be joined fragment 3d conformations in there')
-    parser.add_argument('--reaction', metavar='-r', required=False, type=str, default="amide", help='reaction type from predefined dict')
-    parser.add_argument('--custom_reaction', metavar='-x',  required=False, type=str, help='custom reaction as reaction SMARTS. to be implemented')
-    parser.add_argument('--coord_cutoff', metavar='-c',  required=False, type=float, default=0.25, help='coord cutoff that determines overlap')
-    parser.add_argument('--angle_cutoff', metavar='-a',  required=False, type=float, default=0.7, help='angle cutoff that determines overlap')
-    parser.add_argument('--auto_threshold', metavar='-t',  required=False, type=bool, default=False, help='use automatic threshold instead of explicit one')
-    parser.add_argument('--distance_cutoffs', metavar='-d',nargs=6, required=False, type=float, default=[0.8,0.9,1.2,1.4,1.8,2.0], help='set distance based cutoffs') #try 1.1 1.2 2.0 2.2 2.5 3.0 for strict
-    parser.add_argument('--auto_percentage', metavar='-p',  required=False, type=float, default=0.01, help='percentage to use for thresolding. because of many post merge rejects it does not correspond t the final percentage')    
-    parser.add_argument('--output', metavar='-o', type=str, required=False, default="output.sdf", help='output sdf file with merged fragments')    
+    parser.add_argument('--input', metavar='i',nargs='+', type=str, help='path to sdf file(s) with to be joined fragment 3d conformations in there')
+    parser.add_argument('--reaction', metavar='r', required=False, type=str, default="amide", help='reaction type from predefined dict')
+    parser.add_argument('--custom_reaction', metavar='x',  required=False, type=str, help='custom reaction as reaction SMARTS. to be implemented')
+    parser.add_argument('--coord_cutoff', metavar='c',  required=False, type=float, default=0.25, help='coord cutoff that determines overlap')
+    parser.add_argument('--angle_cutoff', metavar='a',  required=False, type=float, default=0.7, help='angle cutoff that determines overlap')
+    parser.add_argument('--auto_threshold', metavar='t',  required=False, type=bool, default=False, help='use automatic threshold instead of explicit one')
+    parser.add_argument('--distance_cutoffs', metavar='d',nargs=6, required=False, type=float, default=[0.8,0.9,1.2,1.4,1.8,2.0], help='set distance based cutoffs') #try 1.1 1.2 2.0 2.2 2.5 3.0 for strict
+    parser.add_argument('--auto_percentage', metavar='p',  required=False, type=float, default=0.01, help='percentage to use for thresolding. because of many post merge rejects it does not correspond t the final percentage')    
+    parser.add_argument('--output', metavar='o', type=str, required=False, default="output.sdf", help='output sdf file with merged fragments')    
     args = parser.parse_args()
     combine_fragments(args.input,reactionsdict[args.reaction],args.output,args.coord_cutoff,args.angle_cutoff,args.auto_threshold,args.auto_percentage,args.distance_cutoffs)
 
