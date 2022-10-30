@@ -109,7 +109,7 @@ def collision_detect(mol,thr=[0.8,0.9,1.2,1.4,1.8,2.0]):
         collision=False
     return collision
     
-def combine_fragments(sdfs,reaction,outputpath,coord_cutoff=0.25,angle_cutoff=0.7,auto_threshold=False,auto_threshold_percentage=0.1):
+def combine_fragments(sdfs,reaction,outputpath,coord_cutoff=0.25,angle_cutoff=0.7,auto_threshold=False,auto_threshold_percentage=0.1,thr=[0.8,0.9,1.2,1.4,1.8,2.0]):
     """ load the mols in the sdfs, search for the complementary substructs,
     get their coords and angles, retain the ones mathcing within the defined
     threshold and then filter for collisions. save the remaining molecules as
@@ -156,7 +156,7 @@ def combine_fragments(sdfs,reaction,outputpath,coord_cutoff=0.25,angle_cutoff=0.
                     mse1,mse2 = calc_threshold(i1,i2)
                     if mse1<coord_cutoff and mse2>angle_cutoff:
                         mmol = merge_mol(allmols[i],allmols[j],i1,i2,rxn)
-                        if collision_detect(mmol)==False:
+                        if collision_detect(mmol,thr)==False:
                             winners.append(Chem.AddHs(mmol,addCoords=True))
     writer = Chem.SDWriter(outputpath)        
     for mmol in winners:
@@ -177,8 +177,9 @@ if __name__=="__main__":
     parser.add_argument('--coord_cutoff', metavar='-c',  required=False, type=float, default=0.25, help='coord cutoff that determines overlap')
     parser.add_argument('--angle_cutoff', metavar='-a',  required=False, type=float, default=0.7, help='angle cutoff that determines overlap')
     parser.add_argument('--auto_threshold', metavar='-t',  required=False, type=bool, default=False, help='use automatic threshold instead of explicit one')
+    parser.add_argument('--distance_cutoffs', metavar='-d',nargs=6, required=False, type=float, default=[0.8,0.9,1.2,1.4,1.8,2.0], help='set distance based cutoffs') #try 1.1 1.2 2.0 2.2 2.5 3.0 for strict
     parser.add_argument('--auto_percentage', metavar='-p',  required=False, type=float, default=0.01, help='percentage to use for thresolding. because of many post merge rejects it does not correspond t the final percentage')    
     parser.add_argument('--output', metavar='-o', type=str, required=False, default="output.sdf", help='output sdf file with merged fragments')    
     args = parser.parse_args()
-    combine_fragments(args.input,reactionsdict[args.reaction],args.output,args.coord_cutoff,args.angle_cutoff,args.auto_threshold,args.auto_percentage)
+    combine_fragments(args.input,reactionsdict[args.reaction],args.output,args.coord_cutoff,args.angle_cutoff,args.auto_threshold,args.auto_percentage,args.distance_cutoffs)
 
