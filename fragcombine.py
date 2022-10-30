@@ -6,7 +6,8 @@ import argparse
 import time
 
 #note to be removed: why is this SMARTS so strange: because it needs to be able to account for both ammoniums and amines, as well as carboxylic acids and carboxylates. this is because during docking both states are possible for either.
-reactionsdict = {"amide":{"r1":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S)]-[#1:1]","r2":"[CX3;H0:0](-[OX1H0-,OX2H1:1])(=[OX1])-[#6]","SMARTS":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S):100](-[*:101]).[CX3;H0:102](-[OX1H0-,OX2H1:103])(=[OX1:104])-[#6:105]>>[NX3-0:100](-[*:101])-[*:102](=[*:104])-[*:105].[*:103]"}}
+reactionsdict = {"amide":{"r1":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S)]-[#1:1]","r2":"[CX3;H0:0](-[OX1H0-,OX2H1:1])(=[OX1])-[#6]","SMARTS":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S):100](-[*:101]).[CX3;H0:102](-[OX1H0-,OX2H1:103])(=[OX1:104])-[#6:105]>>[NX3-0:100](-[*:101])-[*:102](=[*:104])-[*:105].[*:103]"},
+"amine_alkylation":{"r1":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S)]-[#1:1]","r2":"[CX4:0]-[Cl,Br,I:1]","SMARTS":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S):100](-[*:101]).[CX4:102]-[Cl,Br,I:103]>>[*:100](-[*:101])(-[*:102]).[*:103]"}}
 
 
 
