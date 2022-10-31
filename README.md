@@ -1,5 +1,5 @@
 # RiFF (working repo)
-so far theres just these 3 scripts, i have alot more stuff in jupyter notebooks in need to test and merge in
+here's the riff working repo
 ## fragments
 i have fragments categorized per functional group in the folder fragments
 ## fragcombine
@@ -18,4 +18,16 @@ python3 dock_frags.py --input fragments/c_1000.csv --target ABL1 --output exampl
 python3 dock_frags.py --input fragments/a_1000.csv --target ABL1 --output example_data/a_abl1_dock.sdf
 ```
 ## pharmacophore embed
-still need to think whats the best way to 1. provide ph4s with exlpicit coords, probably a moe like file, 2. how to choose splits or do them exhaustively
+provide a pharmacophore as an csv file of the form feature,x,y,z,radius, one line one feature.
+for example:
+```
+Acceptor,2.275,0.0,0.0,1
+Donor,-2.275,0.0,0.0,1
+Aromatic,0.0,2.275,2,3.85,0.8
+Acceptor,0.0,-2.275,3.85,1
+```
+embed fragment using
+```
+python3 pharmacophore_embed.py --input fragments/a_1000.csv --pharmacophore example_data/ph2.csv --retained_features 1 2 --output example_data/ph4_a_1000.sdf
+python3 pharmacophore_embed.py --input fragments/a_1000.csv --pharmacophore example_data/ph2.csv --retained_features 3 4 --output example_data/ph4_a_1000.sdf
+```
