@@ -6,8 +6,9 @@ import argparse
 import time
 
 #note to be removed: why is this SMARTS so strange: because it needs to be able to account for both ammoniums and amines, as well as carboxylic acids and carboxylates. this is because during docking both states are possible for either.
-reactionsdict = {"amide":{"r1":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S)]-[#1:1]","r2":"[CX3;H0:0](-[OX1H0-,OX2H1:1])(=[OX1])-[#6]","SMARTS":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S):100](-[*:101]).[CX3;H0:102](-[OX1H0-,OX2H1:103])(=[OX1:104])-[#6:105]>>[NX3-0:100](-[*:101])-[*:102](=[*:104])-[*:105].[*:103]"},
-"amine_alkylation":{"r1":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S)]-[#1:1]","r2":"[CX4:0]-[Cl,Br,I:1]","SMARTS":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S):100](-[*:101]).[CX4:102]-[Cl,Br,I:103]>>[*:100](-[*:101])(-[*:102]).[*:103]"}}
+reactionsdict = {"amide":{"r1":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S):0]-[#1:1]","r2":"[CX3;H0:0](-[OX1H0-,OX2H1:1])(=[OX1])-[#6]","SMARTS":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S):100](-[*:101]).[CX3;H0:102](-[OX1H0-,OX2H1:103])(=[OX1:104])-[#6:105]>>[NX3-0:100](-[*:101])-[*:102](=[*:104])-[*:105].[*:103]"},
+"amine_alkylation":{"r1":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S):0]-[#1:1]","r2":"[CX4:0]-[Cl,Br,I:1]","SMARTS":"[NX3H2-0,NX3H1-0,NX4H3+,NX4H2+;!$(NC=O);!$(NS=O);!$(NC=S):100](-[*:101]).[CX4:102]-[Cl,Br,I:103]>>[*:100](-[*:101])(-[*:102]).[*:103]"},
+"suzuki":{"r1":"[#6:0]-[BX3;H0:1](-[OX2])(-[OX2])","r2":"[$([cX3](:*):*),$([cX2+](:*):*),$([CX3]=*),$([CX2+]=*):0]-[Cl,Br,I:1]","SMARTS":"[#6:100]-[BX3;H0:101](-[OX2])(-[OX2]).[$([cX3](:*):*),$([cX2+](:*):*),$([CX3]=*),$([CX2+]=*):102]-[Cl,Br,I:103]>>[*:100]-[*:102].[*:101].[*:103]"}}
 
 
 
@@ -177,7 +178,7 @@ if __name__=="__main__":
     parser.add_argument('--coord_cutoff', metavar='c',  required=False, type=float, default=0.25, help='coord cutoff that determines overlap')
     parser.add_argument('--angle_cutoff', metavar='a',  required=False, type=float, default=0.7, help='angle cutoff that determines overlap')
     parser.add_argument('--auto_threshold', metavar='t',  required=False, type=bool, default=False, help='use automatic threshold instead of explicit one')
-    parser.add_argument('--distance_cutoffs', metavar='d',nargs=6, required=False, type=float, default=[0.8,0.9,1.2,1.4,1.8,2.0], help='set distance based cutoffs') #try 1.1 1.2 2.0 2.2 2.5 3.0 for strict
+    parser.add_argument('--distance_cutoffs', metavar='d',nargs=6, required=False, type=float, default=[0.8,0.9,1.2,1.4,1.8,2.0], help='set distance based cutoffs') #try 1.0 1.2 2.0 2.2 2.5 3.0 for strict
     parser.add_argument('--auto_percentage', metavar='p',  required=False, type=float, default=0.01, help='percentage to use for thresolding. because of many post merge rejects it does not correspond t the final percentage')    
     parser.add_argument('--output', metavar='o', type=str, required=False, default="output.sdf", help='output sdf file with merged fragments')    
     args = parser.parse_args()
