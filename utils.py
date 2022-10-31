@@ -36,4 +36,4 @@ def load_and_split(filenames, curr_slice, total_slices):
     
     
 if __name__=="__main__":
-    assert strip_mol("CCCCCN.HCl")=="CCCCCN"
+    assert strip_mol("CCCCCN.Cl")=="CCCCCN"
