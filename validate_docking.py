@@ -9,21 +9,10 @@ import sys
 sys.path.append(os.path.join(RDConfig.RDContribDir, 'CalcLigRMSD'))
 from CalcLigRMSD import *
 
-
-
-
-
-    
-
 def rmsd_docked(mol,dockedmol):
     """ function for calculating the rmsd between the atoms of the merged and
     docked poses
     """
-    #mc=mol.GetConformer()
-    #coords1 = [list(mc.GetAtomPosition(a.GetIdx())) for a in mol.GetAtoms() if a.GetAtomicNum()!=1]
-    #mcdocked=dockedmol.GetConformer()
-    #coords2 = [list(mcdocked.GetAtomPosition(a.GetIdx())) for a in dockedmol.GetAtoms() if a.GetAtomicNum()!=1]
-    #rmsd = sum([coord for i, coord in coords1])
     confmols=[]
     rmsds=[]
     for conf in dockedmol.GetConformers():
